@@ -1,12 +1,12 @@
-FROM maven:3.8.6-openjdk-18 as prebuilder
-ENV APP_HOME=/usr/app/
+FROM maven:3.8.6-openjdk-18 as builder
+ENV APP_HOME=/usr/app
 WORKDIR $APP_HOME
-COPY target/openapi-spring-*.jar /
+COPY /src/ $APP_HOME/src
+COPY /pom.xml $APP_HOME
+RUN mvn package
 
 
-
-
-FROM prebuilder as builder
+FROM openjdk:18 as personal
 WORKDIR /src/target/
-COPY --from=prebuilder /usr/app/openapi-spring-*.jar /
+COPY --from=builder /usr/app/target/openapi-spring-*.jar /
 ENTRYPOINT java -jar /openapi-spring-*.jar
