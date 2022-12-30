@@ -57,6 +57,7 @@ public interface PersonalApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = PersonalAssignmentsGet200Response.class))
+                    //TODO
             })
         }
     )
@@ -101,6 +102,7 @@ public interface PersonalApi {
             }),
             @ApiResponse(responseCode = "404", description = "not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             })
         },
         security = {
@@ -137,6 +139,7 @@ public interface PersonalApi {
             }),
             @ApiResponse(responseCode = "404", description = "not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             })
         }
     )
@@ -181,12 +184,16 @@ public interface PersonalApi {
             @ApiResponse(responseCode = "204", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "invalid input", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             }),
             @ApiResponse(responseCode = "401", description = "if no (valid) authentication is given", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             }),
             @ApiResponse(responseCode = "422", description = "if the reservation already has an assignment with the given role or the employee does not exist or the reservation does not exist or mismatching id in url and object ", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
+
             })
         },
         security = {
@@ -226,18 +233,23 @@ public interface PersonalApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation of updating an existing assignment. This can only happen if a uuid gets passed. ", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Assignment.class))
+                    //TODO
             }),
             @ApiResponse(responseCode = "201", description = "successful operation of creating a new assignment", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Assignment.class))
+                    //TODO
             }),
             @ApiResponse(responseCode = "400", description = "invalid input", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             }),
             @ApiResponse(responseCode = "401", description = "if no (valid) authentication is given", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             }),
             @ApiResponse(responseCode = "422", description = "if the reservation already has an assignment with the given role or the employee does not exist or the reservation does not exist ", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
+                    //TODO
             })
         },
         security = {
@@ -500,6 +512,7 @@ public interface PersonalApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = PersonalStatusGet200Response.class))
+                    //TODO
             })
         }
     )
