@@ -8,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,11 +27,17 @@ import javax.annotation.Generated;
 @Schema(name = "employee", description = "the representation of an employee")
 @JsonTypeName("employee")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-11-25T15:05:03.794851Z[Etc/UTC]")
+@Entity
+@Table(name = "employees")
 public class Employee {
 
+
+  @Id
+  @Column(name = "id")
   @JsonProperty("id")
   private UUID id;
 
+  @Column(name = "name")
   @JsonProperty("name")
   private String name;
 
@@ -40,7 +50,7 @@ public class Employee {
    * the id of the employee
    * @return id
   */
-  @Valid 
+  @Valid
   @Schema(name = "id", description = "the id of the employee", required = false)
   public UUID getId() {
     return id;
@@ -59,7 +69,7 @@ public class Employee {
    * the name of the employee
    * @return name
   */
-  @NotNull 
+  @NotNull
   @Schema(name = "name", example = "Max Specimeno", description = "the name of the employee", required = true)
   public String getName() {
     return name;
@@ -90,10 +100,15 @@ public class Employee {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Employee {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+//    sb.append("class Employee {\n");
+//    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+//    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+//    sb.append("}");
+    sb.append("{ \n");
+    sb.append("\"id\": \"").append(toIndentedString(id)).append("\", \n");
+    sb.append("\"name\": \"").append(toIndentedString(name)).append("\" \n");
     sb.append("}");
+
     return sb.toString();
   }
 

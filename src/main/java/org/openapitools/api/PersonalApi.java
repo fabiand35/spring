@@ -527,13 +527,13 @@ public interface PersonalApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"Fabi\" : [ \"Johannes\", \"Davis\" ] }";
+                    String exampleString = "{ \"authors\" : [ \"Fabian Droll\", \"Davis Schnebelt\", \"Johannes Vater\" ], \"apiVersion\": \"1.0.0\", \"additionalProp1\" : \"{}\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
             }
         });
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,14 +25,20 @@ import javax.annotation.Generated;
 @Schema(name = "assignment", description = "the assignment between an employee and a reservation with its role. An assignment must only exist once per reservation and role. ")
 @JsonTypeName("assignment")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-11-25T15:05:03.794851Z[Etc/UTC]")
+@Entity
+@Table(name = "assignments")
 public class Assignment {
 
+  @Id
+  @Column(name = "id")
   @JsonProperty("id")
   private UUID id;
 
+  @Column(name = "employee_id")
   @JsonProperty("employee_id")
   private UUID employeeId;
 
+  @Column(name = "reservation_id")
   @JsonProperty("reservation_id")
   private UUID reservationId;
 
@@ -70,6 +77,8 @@ public class Assignment {
     }
   }
 
+  @Column(name = "role")
+  @Enumerated(EnumType.STRING)
   @JsonProperty("role")
   private RoleEnum role;
 
