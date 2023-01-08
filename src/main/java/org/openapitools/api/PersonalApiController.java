@@ -14,6 +14,7 @@ import java.util.*;
 import org.openapitools.repository.AssignmentRepository;
 import org.openapitools.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -110,13 +111,17 @@ public class PersonalApiController implements PersonalApi {
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             }
             else{
-                if (assignmentRepository.findById(id).isPresent()) {
+                if (assignmentRepository.findById(id).isPresent() == true) {
                     assignmentRepository.save(assignment);
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-                } else {
+                }
+                else {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             }
+        }
+        catch (DataIntegrityViolationException ed) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -127,7 +132,7 @@ public class PersonalApiController implements PersonalApi {
     @Override
     public ResponseEntity<Assignment> personalAssignmentsPost(Assignment assignment) {
         try {
-            if (assignmentRepository.findById(assignment.getId()).isPresent()) {
+            if (assignmentRepository.findById(assignment.getId()).isPresent() == true) {
                 assignmentRepository.save(assignment);
                 return ResponseEntity.ok(assignment);
             }
@@ -135,6 +140,9 @@ public class PersonalApiController implements PersonalApi {
                 return new ResponseEntity<>(assignmentRepository.save(assignment), HttpStatus.CREATED);
 
             }
+        }
+        catch (DataIntegrityViolationException ed) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -192,7 +200,7 @@ public class PersonalApiController implements PersonalApi {
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             }
             else{
-                if (employeeRepository.findById(id).isPresent()) {
+                if (employeeRepository.findById(id).isPresent()== true) {
                     employeeRepository.save(employee);
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 } else {
@@ -209,7 +217,7 @@ public class PersonalApiController implements PersonalApi {
     @Override
     public ResponseEntity<Employee> personalEmployeesPost(Employee employee) {
         try {
-            if (employeeRepository.findById(employee.getId()).isPresent()) {
+            if (employeeRepository.findById(employee.getId()).isPresent() == true) {
                 employeeRepository.save(employee);
                 return ResponseEntity.ok(employee);
             }
