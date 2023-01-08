@@ -2,16 +2,15 @@ package org.openapitools.model;
 
 import java.net.URI;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,6 +39,10 @@ public class Employee {
   @Column(name = "name")
   @JsonProperty("name")
   private String name;
+
+//  @JsonIgnore
+//  @OneToMany(mappedBy="assignment")
+//  private List<Assignment> assignments;
 
   public Employee id(UUID id) {
     this.id = id;

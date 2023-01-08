@@ -58,27 +58,88 @@ public class PersonalApiController implements PersonalApi {
 
     @Override
     public ResponseEntity<PersonalAssignmentsGet200Response> personalAssignmentsGet(UUID employeeId) {
-        return PersonalApi.super.personalAssignmentsGet(employeeId);
+        List<Assignment> assignments = new ArrayList<>();
+        Iterable<Assignment> assignmentsIterable = assignmentRepository.findAll();
+        for (Assignment loop: assignmentsIterable){
+            if (loop.getEmployeeId().equals(employeeId)){
+                assignments.add(loop);
+            }
+        }
+        PersonalAssignmentsGet200Response response = new PersonalAssignmentsGet200Response();
+        response.assignments(assignments);
+        return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<Void> personalAssignmentsIdDelete(UUID id) {
-        return PersonalApi.super.personalAssignmentsIdDelete(id);
+        try{
+            if (assignmentRepository.findById(id).isPresent()) {
+                assignmentRepository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            // TODO authentification 401
+            // TODO error
+        }
     }
 
     @Override
     public ResponseEntity<Assignment> personalAssignmentsIdGet(UUID id) {
-        return PersonalApi.super.personalAssignmentsIdGet(id);
+        try {
+            if (assignmentRepository.findById(id).isPresent()) {
+                return ResponseEntity.ok(assignmentRepository.findById(id).get());
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public ResponseEntity<Void> personalAssignmentsIdPut(UUID id, Assignment assignment) {
-        return PersonalApi.super.personalAssignmentsIdPut(id, assignment);
+        try {
+            if (!id.equals(assignment.getId())) {
+                return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+            }
+            else{
+                if (assignmentRepository.findById(id).isPresent()) {
+                    assignmentRepository.save(assignment);
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            //TODO 400, 401
+        }
     }
 
     @Override
     public ResponseEntity<Assignment> personalAssignmentsPost(Assignment assignment) {
-        return PersonalApi.super.personalAssignmentsPost(assignment);
+        try {
+            if (assignmentRepository.findById(assignment.getId()).isPresent()) {
+                assignmentRepository.save(assignment);
+                return ResponseEntity.ok(assignment);
+            }
+            else {
+                return new ResponseEntity<>(assignmentRepository.save(assignment), HttpStatus.CREATED);
+
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            //TODO 400, 401
+        }
     }
 
     @Override
@@ -95,7 +156,7 @@ public class PersonalApiController implements PersonalApi {
     public ResponseEntity<Void> personalEmployeesIdDelete(UUID id) {
         try{
             if (employeeRepository.findById(id).isPresent()) {
-//                    employeeRepository.deleteById(id);
+                    employeeRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             else {
@@ -103,8 +164,7 @@ public class PersonalApiController implements PersonalApi {
             }
         }
         catch (Exception e) {
-
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             // TODO assignment 422, authentification 401
             // TODO error
         }
@@ -143,7 +203,6 @@ public class PersonalApiController implements PersonalApi {
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             //TODO 400, 401
-            //nicht in DB vorhandene ID wird nicht anerkannt
         }
     }
 

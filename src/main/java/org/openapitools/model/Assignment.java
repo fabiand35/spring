@@ -1,12 +1,16 @@
 package org.openapitools.model;
 
+import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
+
+import com.fasterxml.jackson.annotation.*;
+
 import java.util.UUID;
+
+
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import javax.persistence.*;
@@ -34,9 +38,11 @@ public class Assignment {
   @JsonProperty("id")
   private UUID id;
 
+
   @Column(name = "employee_id")
   @JsonProperty("employee_id")
   private UUID employeeId;
+
 
   @Column(name = "reservation_id")
   @JsonProperty("reservation_id")
@@ -46,9 +52,9 @@ public class Assignment {
    * the role which the employee impersonates in this assignment
    */
   public enum RoleEnum {
-    SERVICE("service"),
+    service("service"),
     
-    CLEANUP("cleanup");
+    cleanup("cleanup");
 
     private String value;
 
@@ -70,6 +76,7 @@ public class Assignment {
     public static RoleEnum fromValue(String value) {
       for (RoleEnum b : RoleEnum.values()) {
         if (b.value.equals(value)) {
+          b.toString();
           return b;
         }
       }
@@ -77,10 +84,12 @@ public class Assignment {
     }
   }
 
+  @JsonProperty("role")
   @Column(name = "role")
   @Enumerated(EnumType.STRING)
-  @JsonProperty("role")
+  @Type(type = "org.openapitools.model.PgSQLEnumType")
   private RoleEnum role;
+
 
   public Assignment id(UUID id) {
     this.id = id;
@@ -112,13 +121,10 @@ public class Assignment {
   */
   @NotNull @Valid 
   @Schema(name = "employee_id", description = "the id of the employee this assignment references", required = true)
-  public UUID getEmployeeId() {
-    return employeeId;
-  }
+   public UUID getEmployeeId() {return employeeId;}
 
-  public void setEmployeeId(UUID employeeId) {
-    this.employeeId = employeeId;
-  }
+  public void setEmployeeId(UUID employeeId) {this.employeeId = employeeId;}
+
 
   public Assignment reservationId(UUID reservationId) {
     this.reservationId = reservationId;
@@ -174,18 +180,23 @@ public class Assignment {
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(id, employeeId, reservationId, role);
-  }
+  public int hashCode() {return Objects.hash(id, employeeId, reservationId, role);}
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Assignment {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    employeeId: ").append(toIndentedString(employeeId)).append("\n");
-    sb.append("    reservationId: ").append(toIndentedString(reservationId)).append("\n");
-    sb.append("    role: ").append(toIndentedString(role)).append("\n");
+//    sb.append("class Assignment {\n");
+//    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+//    sb.append("    employeeId: ").append(toIndentedString(employeeId)).append("\n");
+//    sb.append("    reservationId: ").append(toIndentedString(reservationId)).append("\n");
+//    sb.append("    role: ").append(toIndentedString(role)).append("\n");
+//    sb.append("}");
+    sb.append("{ \n");
+    sb.append("\"id\": \"").append(toIndentedString(id)).append("\", \n");
+    sb.append("\"employeeId\": \"").append(toIndentedString(employeeId)).append("\" \n");
+//    sb.append("\"employeeId\": \"").append(toIndentedString(employee.getId())).append("\" \n");
+    sb.append("\"reservationId\": \"").append(toIndentedString(reservationId)).append("\" \n");
+    sb.append("\"role\": \"").append(toIndentedString(role)).append("\" \n");
     sb.append("}");
     return sb.toString();
   }
@@ -201,4 +212,26 @@ public class Assignment {
     return o.toString().replace("\n", "\n    ");
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
