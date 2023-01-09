@@ -14,7 +14,9 @@ import java.util.*;
 import org.openapitools.repository.AssignmentRepository;
 import org.openapitools.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -34,6 +38,8 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 
 import javax.annotation.Generated;
+
+import org.springframework.web.client.RestTemplate;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-11-25T15:05:03.794851Z[Etc/UTC]")
 @Controller
@@ -45,6 +51,9 @@ public class PersonalApiController implements PersonalApi {
     private AssignmentRepository assignmentRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    RestTemplate restTemplate;
+
 
 
     @Autowired
@@ -107,13 +116,25 @@ public class PersonalApiController implements PersonalApi {
     @Override
     public ResponseEntity<Void> personalAssignmentsIdPut(UUID id, Assignment assignment) {
         try {
+            //mismatching id in url and object
             if (!id.equals(assignment.getId())) {
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             }
             else{
                 if (assignmentRepository.findById(id).isPresent() == true) {
-                    assignmentRepository.save(assignment);
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                    //check fi there is an reservation with this id if not -> HttpServerErrorException
+                    UUID reservationId = assignment.getReservationId();
+                    ResponseEntity<Object> responseEntity = restTemplate.getForEntity("http://localhost/api/reservations/{reservationId}/", Object.class, reservationId);
+                    Object object = responseEntity.getBody();
+
+                    if(object != null) {
+                        //TODO if the reservation already has an assignment with the given role ???
+                        assignmentRepository.save(assignment);
+                        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                    }
+                    else{
+                        return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+                    }
                 }
                 else {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -121,6 +142,9 @@ public class PersonalApiController implements PersonalApi {
             }
         }
         catch (DataIntegrityViolationException ed) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        catch (HttpServerErrorException x) {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
@@ -132,16 +156,38 @@ public class PersonalApiController implements PersonalApi {
     @Override
     public ResponseEntity<Assignment> personalAssignmentsPost(Assignment assignment) {
         try {
+            //if the reservation already has an assignment with the given role
+            Iterable<Assignment> assignmentList = assignmentRepository.findAll();
+            for(Assignment a: assignmentList){
+                if(a.getReservationId().equals(assignment.getReservationId()) && a.getRole().equals(assignment.getRole())){
+                    return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+                }
+            }
+            UUID reservationId = assignment.getReservationId();
             if (assignmentRepository.findById(assignment.getId()).isPresent() == true) {
-                assignmentRepository.save(assignment);
-                return ResponseEntity.ok(assignment);
+                ResponseEntity<Object> responseEntity = restTemplate.getForEntity("http://localhost/api/reservations/{reservationId}/", Object.class, reservationId);
+                Object object = responseEntity.getBody();
+                if(object != null) {
+                    //Successful operation of updating an existing assignment. This can only happen if a uuid gets passed.
+                    assignmentRepository.save(assignment);
+                    return ResponseEntity.ok(assignment);
+                }
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             else {
-                return new ResponseEntity<>(assignmentRepository.save(assignment), HttpStatus.CREATED);
-
+                ResponseEntity<Object> responseEntity = restTemplate.getForEntity("http://localhost/api/reservations/{reservationId}/", Object.class, reservationId);
+                Object object = responseEntity.getBody();
+                if(object != null) {
+                    //successful operation of creating a new assignment
+                    return new ResponseEntity<>(assignmentRepository.save(assignment), HttpStatus.CREATED);
+                }
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
         catch (DataIntegrityViolationException ed) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        catch (HttpServerErrorException x) {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
