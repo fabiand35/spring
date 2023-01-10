@@ -128,7 +128,13 @@ public class PersonalApiController implements PersonalApi {
                     Object object = responseEntity.getBody();
 
                     if(object != null) {
-                        //TODO if the reservation already has an assignment with the given role ???
+                        //if the reservation already has an assignment with the given role
+                        Iterable<Assignment> assignmentList = assignmentRepository.findAll();
+                        for(Assignment a: assignmentList) {
+                            if (a.getReservationId().equals(assignment.getReservationId()) && a.getRole().equals(assignment.getRole())) {
+                                return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+                            }
+                        }
                         assignmentRepository.save(assignment);
                         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                     }
