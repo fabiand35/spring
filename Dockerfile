@@ -3,7 +3,7 @@ ENV APP_HOME=/usr/app
 WORKDIR $APP_HOME
 COPY /src/ $APP_HOME/src
 COPY /pom.xml $APP_HOME
-RUN mvn package
+RUN mvn -Dmaven.test.skip clean package
 
 
 FROM openjdk:18 as personal

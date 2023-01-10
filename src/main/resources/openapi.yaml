@@ -17,7 +17,7 @@ tags:
 - description: CRUD assignment between employee and reservation
   name: assignment
 paths:
-  /personal/status/:
+  /personnel/status/:
     get:
       responses:
         "200":
@@ -28,7 +28,7 @@ paths:
           description: successful operation
       summary: returns information about the backend-service and status
       x-accepts: application/json
-  /personal/assignments/:
+  /personnel/assignments/:
     get:
       parameters:
       - description: filter for a given employee
@@ -107,7 +107,7 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: assignment
-  /personal/assignments/{id}/:
+  /personnel/assignments/{id}/:
     delete:
       parameters:
       - description: uuid of the assignment
@@ -225,7 +225,7 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: assignment
-  /personal/employees/:
+  /personnel/employees/:
     get:
       responses:
         "200":
@@ -285,7 +285,7 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: employee
-  /personal/employees/{id}/:
+  /personnel/employees/{id}/:
     delete:
       parameters:
       - description: uuid of the employee
