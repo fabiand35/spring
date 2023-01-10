@@ -122,13 +122,13 @@ public class PersonalApiController implements PersonalApi {
             }
             else{
                 if (assignmentRepository.findById(id).isPresent() == true) {
-                    //check fi there is an reservation with this id if not -> HttpServerErrorException
+                    //check if there is an reservation with this id if not -> HttpServerErrorException
                     UUID reservationId = assignment.getReservationId();
                     ResponseEntity<Object> responseEntity = restTemplate.getForEntity("http://localhost/api/reservations/{reservationId}/", Object.class, reservationId);
                     Object object = responseEntity.getBody();
 
                     if(object != null) {
-                        //TODO if the reservation already has an assignment with the given role ???
+                        //TODO if the reservation already has an assignment with the given role
                         assignmentRepository.save(assignment);
                         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                     }
@@ -137,7 +137,7 @@ public class PersonalApiController implements PersonalApi {
                     }
                 }
                 else {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         }
@@ -172,7 +172,7 @@ public class PersonalApiController implements PersonalApi {
                     assignmentRepository.save(assignment);
                     return ResponseEntity.ok(assignment);
                 }
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             else {
                 ResponseEntity<Object> responseEntity = restTemplate.getForEntity("http://localhost/api/reservations/{reservationId}/", Object.class, reservationId);
@@ -181,7 +181,7 @@ public class PersonalApiController implements PersonalApi {
                     //successful operation of creating a new assignment
                     return new ResponseEntity<>(assignmentRepository.save(assignment), HttpStatus.CREATED);
                 }
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         catch (DataIntegrityViolationException ed) {
