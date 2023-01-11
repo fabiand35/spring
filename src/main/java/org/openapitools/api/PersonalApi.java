@@ -40,6 +40,7 @@ import javax.annotation.Generated;
 @Tag(name = "personal", description = "CRUD assignment between employee and reservation")
 public interface PersonalApi {
 
+
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
