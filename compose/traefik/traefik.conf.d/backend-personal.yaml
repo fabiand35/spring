@@ -1,6 +1,6 @@
 http:
   routers:
-    backend-personal:
+    backend-personnel:
       entryPoints:
         - web
       rule: PathPrefix(`/api/personnel`)
@@ -8,10 +8,10 @@ http:
         # middlewares are defined in backend.yaml
         - api-strip-prefix
         - api-headers
-      service: backend-personal
+      service: backend-personnel
   services:
-    backend-personal:
+    backend-personnel:
       loadBalancer:
         servers:
-          - url: http://backend-personal:9000
+          - url: http://backend-personnel:9000
           #- url: http://host.docker.internal:9000

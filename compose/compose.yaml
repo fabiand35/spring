@@ -85,7 +85,7 @@ services:
       - "9000"
     restart: unless-stopped
     
-  backend-personal:
+  backend-personnel:
     image: ${BACKEND_PERSONAL_IMAGE_REPOSITORY}:${BACKEND_PERSONAL_IMAGE_VERSION}
     depends_on:
       - postgres
