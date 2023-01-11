@@ -23,7 +23,8 @@ public class CustomSecurityConfiguration {
     @Qualifier("customAuthenticationEntryPoint")
     AuthenticationEntryPoint authEntryPoint;
 
-    String jwkSetUri = "http://localhost/auth/realms/biletado/protocol/openid-connect/certs";
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    String jwkSetUri;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
