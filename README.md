@@ -1,3 +1,4 @@
+## Main
 * Team: Fabian Droll, Johannes Vater, Davis Schnebelt
 * License: MIT
 * Language: Java (Version 19)
@@ -39,16 +40,42 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
 ## Local
 
 ### Build
-* `./build_docker_image.sh`
-* `docker build -t spring ./`
+* `docker build -t personal ./`
 
 ### Run
-* `./run_docker.sh`
-
-### Build & Run
-`./build_and_run_docker.sh`
+* `docker run -p 9000:9000 --network="host" --env-file ./env.list personal:latest`
 
 # Config
-Umgebungsvariablen:
-BACKEND_PERSONAL_IMAGE_REPOSITORY=ghcr.io/fabiand35/personal
-BACKEND_PERSONAL_IMAGE_VERSION=master
+
+## Environment variables
+
+With default values for local development:
+```
+POSTGRES_PERSONAL_USER=postgres
+POSTGRES_PERSONAL_PASSWORD=postgres
+POSTGRES_PERSONAL_DBNAME=personal
+POSTGRES_PERSONAL_HOST=localhost;POSTGRES_PERSONAL_PORT=5432
+BACKEND_URL=http://localhost/api/reservations/
+KEYCLOAK_HOST=localhost
+KEYCLOAK_REALM=biletado
+```
+
+# CI/CD
+CI/CD ist realized with GitHub [Actions](https://github.com/fabiand35/spring/actions).
+The workflows are located in `.github/workflows/docker-image.yml`.
+
+![github_actions.png](docs%2Fgithub_actions.png)
+
+A Docker image is created and uploaded to the registry.
+
+# Authentication
+The JWT token is parsed by the [Spring Security](https://spring.io/projects/spring-security) framework.
+
+The configuration is in the class `.org.openapitools.configuration.CustomSecurityConfiguration`.
+
+# How to use
+Start the docker compose application in the `compose` directory with: `docker-compose up`.
+You can now test the personal backend under `localhost`.
+
+If you want to test backend locally in IntelliJ you can use the run profile `OpenApiGeneratorApplication`
+from the `.run` directory. For local tests, docker-compose needs to be running.
