@@ -54,10 +54,11 @@ With default values for local development:
 POSTGRES_PERSONAL_USER=postgres
 POSTGRES_PERSONAL_PASSWORD=postgres
 POSTGRES_PERSONAL_DBNAME=personal
-POSTGRES_PERSONAL_HOST=localhost;POSTGRES_PERSONAL_PORT=5432
+POSTGRES_PERSONAL_HOST=localhost
+POSTGRES_PERSONAL_PORT=5432
 KEYCLOAK_HOST=localhost
 KEYCLOAK_REALM=biletado
-RESERVATION_URL=http://localhost/api/reservations/
+BACKEND_URL=http://localhost/api/reservations/
 ```
 
 # CI/CD
