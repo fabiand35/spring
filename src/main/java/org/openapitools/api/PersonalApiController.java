@@ -1,6 +1,7 @@
 package org.openapitools.api;
 
 import com.sun.xml.bind.v2.TODO;
+import org.hibernate.resource.beans.container.spi.BeanLifecycleStrategy;
 import org.openapitools.model.Assignment;
 import org.openapitools.model.Employee;
 import org.openapitools.model.Error;
@@ -54,7 +55,7 @@ public class PersonalApiController implements PersonalApi {
     @Autowired
     RestTemplate restTemplate;
 
-    @Value("${BACKEND_URL}")
+    @Value("${RESERVATION_URL}")
     private String url;
 
 
@@ -70,12 +71,28 @@ public class PersonalApiController implements PersonalApi {
     }
 
     @Override
-    public ResponseEntity<PersonalAssignmentsGet200Response> personalAssignmentsGet(UUID employeeId) {
+    public ResponseEntity<PersonalAssignmentsGet200Response> personalAssignmentsGet(UUID employeeId, UUID reservationId) {
         List<Assignment> assignments = new ArrayList<>();
         Iterable<Assignment> assignmentsIterable = assignmentRepository.findAll();
-        for (Assignment loop: assignmentsIterable){
-            if (loop.getEmployeeId().equals(employeeId)){
-                assignments.add(loop);
+        if (reservationId == null){
+            for (Assignment loop: assignmentsIterable){
+                if (loop.getEmployeeId().equals(employeeId)) {
+                    assignments.add(loop);
+                }
+            }
+        }
+        else if(employeeId == null) {
+            for (Assignment loop: assignmentsIterable){
+                if (loop.getReservationId().equals(reservationId)) {
+                    assignments.add(loop);
+                }
+            }
+        }
+        else if (employeeId != null && reservationId != null) {
+            for (Assignment loop: assignmentsIterable){
+                if (loop.getEmployeeId().equals(employeeId) && loop.getReservationId().equals(reservationId)) {
+                    assignments.add(loop);
+                }
             }
         }
         PersonalAssignmentsGet200Response response = new PersonalAssignmentsGet200Response();

@@ -68,7 +68,8 @@ public interface PersonalApi {
         produces = { "application/json" }
     )
     default ResponseEntity<PersonalAssignmentsGet200Response> personalAssignmentsGet(
-        @Parameter(name = "employee_id", description = "filter for a given employee") @Valid @RequestParam(value = "employee_id", required = false) UUID employeeId
+        @Parameter(name = "employee_id", description = "filter for a given employee") @Valid @RequestParam(value = "employee_id", required = false) UUID employeeId,
+        @Parameter(name = "reservation_id", description = "filter for a given reservation") @Valid @RequestParam(value = "reservation_id", required = false) UUID reservationId
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
