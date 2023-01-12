@@ -135,6 +135,10 @@ public class PersonalApiController implements PersonalApi {
         try {
             //mismatching id in url and object
             if (!id.equals(assignment.getId())) {
+                getRequest().ifPresent(req ->
+                {
+                    ApiUtil.setErrorResponse(req, "mismatching id in url and object");
+                });
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             }
             else{
@@ -149,6 +153,10 @@ public class PersonalApiController implements PersonalApi {
                         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                     }
                     else{
+                        getRequest().ifPresent(req ->
+                        {
+                            ApiUtil.setErrorResponse(req, "reservation does not exist");
+                        });
                         return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
                     }
                 }
@@ -158,18 +166,21 @@ public class PersonalApiController implements PersonalApi {
             }
         }
         catch (DataIntegrityViolationException ed) {
+            getRequest().ifPresent(req ->
+            {
+                ApiUtil.setErrorResponse(req, "employee does not exist ");
+            });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (HttpServerErrorException x) {
             getRequest().ifPresent(req ->
             {
-                ApiUtil.setErrorResponse(req, "reservation does not exist");
+                ApiUtil.setErrorResponse(req, "reservation has an assignment with the given role");
             });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            //TODO 400, 401
         }
     }
 
@@ -192,7 +203,13 @@ public class PersonalApiController implements PersonalApi {
                     assignmentRepository.save(assignment);
                     return ResponseEntity.ok(assignment);
                 }
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                else{
+                    getRequest().ifPresent(req ->
+                    {
+                        ApiUtil.setErrorResponse(req, "reservation does not exist");
+                    });
+                    return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+                }
             }
             else {
                 ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url + reservationId.toString() + "/", Object.class);
@@ -201,19 +218,31 @@ public class PersonalApiController implements PersonalApi {
                     //successful operation of creating a new assignment
                     return new ResponseEntity<>(assignmentRepository.save(assignment), HttpStatus.CREATED);
                 }
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                else{
+                    getRequest().ifPresent(req ->
+                    {
+                        ApiUtil.setErrorResponse(req, "reservation does not exist");
+                    });
+                    return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+                }
             }
         }
         catch (DataIntegrityViolationException ed) {
-            //is not present in table "employees".
+            getRequest().ifPresent(req ->
+            {
+                ApiUtil.setErrorResponse(req, "employee does not exist ");
+            });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (HttpServerErrorException x) {
+            getRequest().ifPresent(req ->
+            {
+                ApiUtil.setErrorResponse(req, "reservation has an assignment with the given role");
+            });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            //TODO 400, 401
         }
     }
 
@@ -239,9 +268,11 @@ public class PersonalApiController implements PersonalApi {
             }
         }
         catch (Exception e) {
+            getRequest().ifPresent(req ->
+            {
+                ApiUtil.setErrorResponse(req, "deletion not possible because of existing assignments");
+            });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-            // TODO assignment 422, authentification 401
-            // TODO error
         }
     }
 
@@ -264,6 +295,10 @@ public class PersonalApiController implements PersonalApi {
     public ResponseEntity<Void> personalEmployeesIdPut(UUID id, Employee employee) {
         try {
             if (!id.equals(employee.getId())) {
+                getRequest().ifPresent(req ->
+                {
+                    ApiUtil.setErrorResponse(req, "mismatching id in url and object");
+                });
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             }
             else{

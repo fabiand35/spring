@@ -21,14 +21,12 @@ public class ApiUtil {
         }
     }
 
-    static final ObjectMapper mapper = new ObjectMapper();
 
     public static void setErrorResponse(NativeWebRequest req, String string) {
         try {
             HttpServletResponse res = req.getNativeResponse(HttpServletResponse.class);
             res.setCharacterEncoding("UTF-8");
             res.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-//            String message =  mapper.writeValueAsString(string);
             String message = toJson(string);
             res.getWriter().print(Encode.forHtmlContent(message));
         } catch (IOException e) {
