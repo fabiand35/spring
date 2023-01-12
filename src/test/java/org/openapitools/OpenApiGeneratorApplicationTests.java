@@ -12,11 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureMockMvc()
 class OpenApiGeneratorApplicationTests {
 
     @Test
-    void testStatusApiCall() throws Exception {
+    void testSout(){
         System.out.println("test");
     }
 
