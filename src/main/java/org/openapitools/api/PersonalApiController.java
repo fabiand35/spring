@@ -172,7 +172,7 @@ public class PersonalApiController implements PersonalApi {
                     }
                 }
                 else {
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             }
         }
