@@ -55,7 +55,7 @@ public class PersonalApiController implements PersonalApi {
     @Autowired
     RestTemplate restTemplate;
 
-    @Value("${RESERVATION_URL}")
+    @Value("${BACKEND_URL}")
     private String url;
 
 
