@@ -28,10 +28,20 @@ public class ApiUtil {
             HttpServletResponse res = req.getNativeResponse(HttpServletResponse.class);
             res.setCharacterEncoding("UTF-8");
             res.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-            String message =  mapper.writeValueAsString(string);
+//            String message =  mapper.writeValueAsString(string);
+            String message = toJson(string);
             res.getWriter().print(Encode.forHtmlContent(message));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String toJson(String message) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{ \n");
+        sb.append("\"id\": \"").append(message).append("\", \n");
+        sb.append("\"name\": \"").append("\" \n");
+        sb.append("}");
+        return sb.toString();
     }
 }

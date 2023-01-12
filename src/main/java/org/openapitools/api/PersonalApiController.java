@@ -205,6 +205,7 @@ public class PersonalApiController implements PersonalApi {
             }
         }
         catch (DataIntegrityViolationException ed) {
+            //is not present in table "employees".
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (HttpServerErrorException x) {
