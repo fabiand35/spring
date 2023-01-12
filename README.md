@@ -4,7 +4,7 @@
 * Language: Java (Version 19)
 * Framework: Spring Boot (https://spring.io/projects/spring-boot) 2.7.6
 * ORM: JPA (https://spring.io/guides/gs/accessing-data-jpa/) mit Hibernate (https://hibernate.org/) und PostgreSQL (spring-boot-starter-jpa)
-* Docker Image: ghrc.io/fabiand35/biletado
+* Docker Image: ghrc.io/fabiand35/personal
 * Port: 9000
 
 # OpenAPI generated server
