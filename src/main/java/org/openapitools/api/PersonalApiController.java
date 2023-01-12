@@ -55,9 +55,11 @@ public class PersonalApiController implements PersonalApi {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    Error error;
+
     @Value("${BACKEND_URL}")
     private String url;
-
 
 
     @Autowired
@@ -113,8 +115,6 @@ public class PersonalApiController implements PersonalApi {
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            // TODO authentification 401
-            // TODO error
         }
     }
 
@@ -148,7 +148,6 @@ public class PersonalApiController implements PersonalApi {
                     Object object = responseEntity.getBody();
 
                     if(object != null) {
-                        //TODO if the reservation already has an assignment with the given role
                         assignmentRepository.save(assignment);
                         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                     }
@@ -165,6 +164,10 @@ public class PersonalApiController implements PersonalApi {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (HttpServerErrorException x) {
+            getRequest().ifPresent(req ->
+            {
+                ApiUtil.setErrorResponse(req, "reservation does not exist");
+            });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
