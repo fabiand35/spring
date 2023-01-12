@@ -63,8 +63,6 @@ KEYCLOAK_REALM=biletado
 CI/CD ist realized with GitHub [Actions](https://github.com/fabiand35/spring/actions).
 The workflows are located in `.github/workflows/docker-image.yml`.
 
-![github_actions.png](docs%2Fgithub_actions.png)
-
 A Docker image is created and uploaded to the registry.
 
 # Authentication
