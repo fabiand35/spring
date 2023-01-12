@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc()
-class PersonalV1ApiBackendApplicationTests {
+class OpenApiGeneratorApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
