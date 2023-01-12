@@ -39,8 +39,8 @@ public class ApiUtil {
     public static String toJson(String message) {
         StringBuilder sb = new StringBuilder();
         sb.append("{ \n");
-        sb.append("\"id\": \"").append(message).append("\", \n");
-        sb.append("\"name\": \"").append("\" \n");
+        sb.append("\"message\": \"").append(message).append("\", \n");
+        sb.append("\"additionalProp1\": {").append("} \n");
         sb.append("}");
         return sb.toString();
     }
