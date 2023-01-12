@@ -126,8 +126,8 @@ public class PersonalApiController implements PersonalApi {
             else{
                 if (assignmentRepository.findById(id).isPresent() == true) {
                     //check if there is an reservation with this id if not -> HttpServerErrorException
-                    String reservationId = assignment.getReservationId().toString();
-                    ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url_reservation + reservationId + "/", Object.class);
+                    UUID reservationId = assignment.getReservationId();
+                    ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url_reservation + reservationId.toString() + "/", Object.class);
                     Object object = responseEntity.getBody();
 
                     if(object != null) {
@@ -166,9 +166,9 @@ public class PersonalApiController implements PersonalApi {
                     return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
                 }
             }
-            String reservationId = assignment.getReservationId().toString();
+            UUID reservationId = assignment.getReservationId();
             if (assignmentRepository.findById(assignment.getId()).isPresent() == true) {
-                ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url_reservation + reservationId + "/", Object.class);
+                ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url_reservation + reservationId.toString() + "/", Object.class);
                 Object object = responseEntity.getBody();
                 if(object != null) {
                     //Successful operation of updating an existing assignment. This can only happen if a uuid gets passed.
@@ -178,7 +178,7 @@ public class PersonalApiController implements PersonalApi {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             else {
-                ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url_reservation + reservationId + "/", Object.class);
+                ResponseEntity<Object> responseEntity = restTemplate.getForEntity(url_reservation + reservationId.toString() + "/", Object.class);
                 Object object = responseEntity.getBody();
                 if(object != null) {
                     //successful operation of creating a new assignment
