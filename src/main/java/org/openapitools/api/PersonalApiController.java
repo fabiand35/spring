@@ -136,7 +136,7 @@ public class PersonalApiController implements PersonalApi {
             //if the reservation already has an assignment with the given role
             Iterable<Assignment> assignmentList = assignmentRepository.findAll();
             for(Assignment a: assignmentList) {
-                if (a.getReservationId().equals(assignment.getReservationId()) && a.getRole().equals(assignment.getRole())) {
+                if (a.getReservationId().equals(assignment.getReservationId()) && a.getRole().equals(assignment.getRole()) && a.getId()!=(assignment.getId())) {
                     getRequest().ifPresent(req ->
                     {
                         ApiUtil.setErrorResponse(req, "reservation has an assignment with the given role");
