@@ -55,9 +55,6 @@ public class PersonalApiController implements PersonalApi {
     @Autowired
     RestTemplate restTemplate;
 
-    @Autowired
-    Error error;
-
     @Value("${BACKEND_URL}")
     private String url;
 
