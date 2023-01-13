@@ -22,7 +22,7 @@ class OpenApiGeneratorApplicationTests {
     private MockMvc mockMvc;
     @Test
     void testStatusMessage() throws Exception{
-        this.mockMvc.perform(get("/personnel/status/")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/personnel/status/")).andExpect(status().isOk());
 
     }
 }
