@@ -30,7 +30,6 @@ import javax.annotation.Generated;
 @Table(name = "employees")
 public class Employee {
 
-
   @Id
   @Column(name = "id")
   @JsonProperty("id")
@@ -40,9 +39,6 @@ public class Employee {
   @JsonProperty("name")
   private String name;
 
-//  @JsonIgnore
-//  @OneToMany(mappedBy="assignment")
-//  private List<Assignment> assignments;
 
   public Employee id(UUID id) {
     this.id = id;
