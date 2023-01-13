@@ -13,4 +13,5 @@ class OpenApiGeneratorApplicationTests {
         System.out.println("test");
     }
 
+
 }
