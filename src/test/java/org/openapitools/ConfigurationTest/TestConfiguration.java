@@ -12,9 +12,9 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 @Configuration
 @Profile("test")
 @EnableWebSecurity
-public class TestConfiiguration {
+public class TestConfiguration {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain testfilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
                 )
