@@ -1,5 +1,5 @@
 ## Main
-* Team: Fabian Droll, Johannes Vater, Davis Schnebelt
+* Team: Fabian Droll, Davis Schnebelt
 * License: MIT
 * Language: Java (Version 19)
 * Framework: Spring Boot (https://spring.io/projects/spring-boot) 2.7.6
