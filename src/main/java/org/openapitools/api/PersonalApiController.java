@@ -184,7 +184,10 @@ public class PersonalApiController implements PersonalApi {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (HttpServerErrorException x) {
-
+            getRequest().ifPresent(req ->
+            {
+                ApiUtil.setErrorResponse(req, "reservation does not exist");
+            });
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
         catch (Exception e) {
@@ -198,7 +201,7 @@ public class PersonalApiController implements PersonalApi {
             //if the reservation already has an assignment with the given role
             Iterable<Assignment> assignmentList = assignmentRepository.findAll();
             for(Assignment a: assignmentList){
-                if(a.getReservationId().equals(assignment.getReservationId()) && a.getRole().equals(assignment.getRole())){
+                if(a.getReservationId().equals(assignment.getReservationId()) && a.getRole().equals(assignment.getRole()) && !a.getId().equals(assignment.getId())){
                     getRequest().ifPresent(req ->
                     {
                         ApiUtil.setErrorResponse(req, "reservation has an assignment with the given role");
