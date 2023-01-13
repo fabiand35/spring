@@ -16,7 +16,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Profile("prod")
 @EnableWebSecurity
 public class CustomSecurityConfiguration {
 
