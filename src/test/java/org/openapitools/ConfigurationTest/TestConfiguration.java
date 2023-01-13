@@ -13,6 +13,10 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 @Profile("test")
 @EnableWebSecurity
 public class TestConfiguration {
+
+    String KEYCLOAK_HOST = "";
+    String KEYCLOAK_REALM = "";
+
     @Bean
     public SecurityFilterChain testfilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
